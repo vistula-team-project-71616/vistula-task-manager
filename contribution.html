@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Team Contribution</title>
+  <link rel="icon" href="data:,">
+  <style>
+    body {
+      max-width: 640px;
+      margin: 40px auto;
+      padding: 0 16px;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.5;
+    }
+    button {
+      padding: 6px 14px;
+      font: inherit;
+      cursor: pointer;
+    }
+    #contributor-student-id {
+      min-height: 1.5em;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <h1>Team Contribution</h1>
+
+  <button id="load-contributor" type="button">Show Contributor</button>
+
+  <p id="contributor-student-id" aria-live="polite"></p>
+
+  <p><a href="index.html">Back to the Task Manager</a></p>
+
+  <script>
+    // The ID is read from contribution.json on every click, never hardcoded here.
+    document.getElementById('load-contributor').addEventListener('click', async () => {
+      const output = document.getElementById('contributor-student-id');
+      try {
+        const response = await fetch('contribution.json', { cache: 'no-store' });
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+        const data = await response.json();
+        if (!data.contributorStudentId) {
+          throw new Error('the contributorStudentId field is missing');
+        }
+        output.textContent = `Contributor Student ID: ${data.contributorStudentId}`;
+      } catch (error) {
+        output.textContent = `Could not load contribution.json: ${error.message}`;
+      }
+    });
+  </script>
+</body>
+</html>
